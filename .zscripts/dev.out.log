@@ -1,0 +1,344 @@
+==========================================
+[2026-03-31 18:21:28] Starting: bun install
+==========================================
+[BUN] Installing dependencies...
+[0.34ms] ".env"
+bun install v1.3.10 (30e609e0)
+
++ @tailwindcss/postcss@4.1.18
++ @types/react@19.2.8
++ @types/react-dom@19.2.3
++ bun-types@1.3.6
++ eslint@9.39.2
++ eslint-config-next@16.1.3
++ tailwindcss@4.1.18
++ tw-animate-css@1.4.0
++ typescript@5.9.3
++ @dnd-kit/core@6.3.1
++ @dnd-kit/sortable@10.0.0
++ @dnd-kit/utilities@3.2.2
++ @hookform/resolvers@5.2.2
++ @mdxeditor/editor@3.52.3
++ @prisma/client@6.19.2
++ @radix-ui/react-accordion@1.2.12
++ @radix-ui/react-alert-dialog@1.1.15
++ @radix-ui/react-aspect-ratio@1.1.8
++ @radix-ui/react-avatar@1.1.11
++ @radix-ui/react-checkbox@1.3.3
++ @radix-ui/react-collapsible@1.1.12
++ @radix-ui/react-context-menu@2.2.16
++ @radix-ui/react-dialog@1.1.15
++ @radix-ui/react-dropdown-menu@2.1.16
++ @radix-ui/react-hover-card@1.1.15
++ @radix-ui/react-label@2.1.8
++ @radix-ui/react-menubar@1.1.16
++ @radix-ui/react-navigation-menu@1.2.14
++ @radix-ui/react-popover@1.1.15
++ @radix-ui/react-progress@1.1.8
++ @radix-ui/react-radio-group@1.3.8
++ @radix-ui/react-scroll-area@1.2.10
++ @radix-ui/react-select@2.2.6
++ @radix-ui/react-separator@1.1.8
++ @radix-ui/react-slider@1.3.6
++ @radix-ui/react-slot@1.2.4
++ @radix-ui/react-switch@1.2.6
++ @radix-ui/react-tabs@1.1.13
++ @radix-ui/react-toast@1.2.15
++ @radix-ui/react-toggle@1.1.10
++ @radix-ui/react-toggle-group@1.1.11
++ @radix-ui/react-tooltip@1.2.8
++ @reactuses/core@6.1.9
++ @tanstack/react-query@5.90.19
++ @tanstack/react-table@8.21.3
++ class-variance-authority@0.7.1
++ clsx@2.1.1
++ cmdk@1.1.1
++ date-fns@4.1.0
++ embla-carousel-react@8.6.0
++ framer-motion@12.26.2
++ input-otp@1.4.2
++ lucide-react@0.525.0
++ next@16.1.3
++ next-auth@4.24.13
++ next-intl@4.7.0
++ next-themes@0.4.6
++ prisma@6.19.2
++ react@19.2.3
++ react-day-picker@9.13.0
++ react-dom@19.2.3
++ react-hook-form@7.71.1
++ react-markdown@10.1.0
++ react-resizable-panels@3.0.6
++ react-syntax-highlighter@15.6.6
++ recharts@2.15.4
++ sharp@0.34.5
++ sonner@2.0.7
++ tailwind-merge@3.4.0
++ tailwindcss-animate@1.0.7
++ uuid@11.1.0
++ vaul@1.1.2
++ z-ai-web-dev-sdk@0.0.17
++ zod@4.3.5
++ zustand@5.0.10
+
+827 packages installed [7.75s]
+==========================================
+[2026-03-31 18:21:36] Completed: bun install
+[LOG] Step: bun install | Duration: 8s
+==========================================
+
+==========================================
+[2026-03-31 18:21:36] Starting: bun run db:push
+==========================================
+[BUN] Setting up database...
+$ prisma db push
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": SQLite database "custom.db" at "file:/home/z/my-project/db/custom.db"
+
+SQLite database custom.db created at file:/home/z/my-project/db/custom.db
+
+🚀  Your database is now in sync with your Prisma schema. Done in 18ms
+
+Running generate... (Use --skip-generate to skip the generators)
+[2K[1A[2K[GRunning generate... - Prisma Client
+[2K[1A[2K[G✔ Generated Prisma Client (v6.19.2) to ./node_modules/@prisma/client in 75ms
+┌─────────────────────────────────────────────────────────┐
+│  Update available 6.19.2 -> 7.6.0                       │
+│                                                         │
+│  This is a major update - please follow the guide at    │
+│  https://pris.ly/d/major-version-upgrade                │
+│                                                         │
+│  Run the following to update                            │
+│    npm i --save-dev prisma@latest                       │
+│    npm i @prisma/client@latest                          │
+└─────────────────────────────────────────────────────────┘
+
+==========================================
+[2026-03-31 18:21:38] Completed: bun run db:push
+[LOG] Step: bun run db:push | Duration: 2s
+==========================================
+
+==========================================
+[2026-03-31 18:21:38] Starting: Starting Next.js dev server
+==========================================
+[BUN] Starting development server...
+==========================================
+$ next dev -p 3000 2>&1 | tee dev.log
+[2026-03-31 18:21:38] Completed: Starting Next.js dev server
+[LOG] Step: Starting Next.js dev server | Duration: 0s
+==========================================
+
+==========================================
+[2026-03-31 18:21:38] Starting: Waiting for Next.js dev server
+==========================================
+Waiting for Next.js dev server to be ready on localhost:3000...
+Attempt 1/60: Next.js dev server not ready yet, waiting...
+▲ Next.js 16.1.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://21.0.11.160:3000
+- Environments: .env
+
+✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+
+  We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+  The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+
+  	- include was updated to add '.next/dev/types/**/*.ts'
+
+  The following mandatory changes were made to your tsconfig.json:
+
+  	- jsx was set to react-jsx (next.js uses the React automatic runtime)
+
+✓ Ready in 912ms
+ GET / 200 in 2.7s (compile: 2.6s, render: 158ms)
+Next.js dev server is ready!
+ GET / 200 in 2.0s (compile: 1816ms, render: 218ms)
+ GET / 200 in 2.8s (compile: 2.6s, render: 179ms)
+==========================================
+[2026-03-31 18:21:42] Completed: Waiting for Next.js dev server
+[LOG] Step: Waiting for Next.js dev server | Duration: 4s
+==========================================
+
+==========================================
+[2026-03-31 18:21:42] Starting: Health check
+==========================================
+[BUN] Performing health check...
+ GET / 200 in 24ms (compile: 1826µs, render: 22ms)
+[BUN] Health check passed
+==========================================
+[2026-03-31 18:21:42] Completed: Health check
+[LOG] Step: Health check | Duration: 0s
+==========================================
+
+==========================================
+[2026-03-31 18:21:42] Starting: Starting mini-services
+==========================================
+Found mini-services directory, scanning for sub-services...
+Mini-services startup completed. Started 0 service(s).
+==========================================
+[2026-03-31 18:21:42] Completed: Starting mini-services
+[LOG] Step: Starting mini-services | Duration: 0s
+==========================================
+
+Next.js dev server is running in background (PID: 658).
+Use 'kill 658' to stop it.
+ GET / 200 in 35ms (compile: 3ms, render: 32ms)
+✓ Compiled in 136ms
+⚠ Cross origin request detected from preview-chat-cc644eec-7fc2-4302-8ceb-d112f24f3da6.space.z.ai to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET / 200 in 77ms (compile: 47ms, render: 30ms)
+ GET / 200 in 53ms (compile: 34ms, render: 19ms)
+ GET / 200 in 25ms (compile: 2ms, render: 23ms)
+ GET / 200 in 14ms (compile: 3ms, render: 11ms)
+ GET / 200 in 12ms (compile: 1819µs, render: 10ms)
+ GET / 200 in 17ms (compile: 2ms, render: 15ms)
+ GET / 200 in 19ms (compile: 2ms, render: 16ms)
+ GET / 200 in 13ms (compile: 1522µs, render: 11ms)
+ GET / 200 in 17ms (compile: 1713µs, render: 15ms)
+✓ Compiled in 1400ms
+ GET / 200 in 50ms (compile: 36ms, render: 14ms)
+ GET / 200 in 180ms (compile: 4ms, render: 176ms)
+ GET / 200 in 74ms (compile: 6ms, render: 68ms)
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+ POST /api/generate-itinerary 200 in 47s (compile: 307ms, render: 47s)
+ POST /api/generate-itinerary 200 in 34.3s (compile: 3ms, render: 34.3s)
+prisma:query SELECT 1
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+prisma:query SELECT 1
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+ POST /api/generate-itinerary 200 in 16.5s (compile: 3ms, render: 16.5s)
+ GET / 200 in 53ms (compile: 3ms, render: 50ms)
+ GET / 200 in 79ms (compile: 3ms, render: 76ms)
+✓ Compiled in 186ms
+✓ Compiled in 179ms
+ GET / 200 in 226ms (compile: 53ms, render: 173ms)
+ GET / 200 in 56ms (compile: 4ms, render: 53ms)
+JSON parse failed, trying regex extraction
+Error generating itinerary: SyntaxError: Expected ',' or '}' after property value in JSON at position 6735 (line 204 column 8)
+    at JSON.parse (<anonymous>)
+    at POST (src/app/api/generate-itinerary/route.ts:70:26)
+  68 |       const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+  69 |       if (jsonMatch) {
+> 70 |         itinerary = JSON.parse(jsonMatch[0]);
+     |                          ^
+  71 |       } else {
+  72 |         throw new Error("Não foi possível processar a resposta da IA. Tente novamente.");
+  73 |       }
+ POST /api/generate-itinerary 500 in 18.3s (compile: 49ms, render: 18.2s)
+ GET / 200 in 75ms (compile: 7ms, render: 68ms)
+✓ Compiled in 109ms
+✓ Compiled in 109ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 200 in 249ms (compile: 55ms, render: 194ms)
+ GET / 200 in 56ms (compile: 4ms, render: 52ms)
+ GET / 200 in 44ms (compile: 3ms, render: 41ms)
+JSON parse failed, trying regex extraction
+Error generating itinerary: SyntaxError: Expected ',' or ']' after array element in JSON at position 6695 (line 205 column 10)
+    at JSON.parse (<anonymous>)
+    at POST (src/app/api/generate-itinerary/route.ts:70:26)
+  68 |       const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+  69 |       if (jsonMatch) {
+> 70 |         itinerary = JSON.parse(jsonMatch[0]);
+     |                          ^
+  71 |       } else {
+  72 |         throw new Error("Não foi possível processar a resposta da IA. Tente novamente.");
+  73 |       }
+ POST /api/generate-itinerary 500 in 15.1s (compile: 2ms, render: 15.1s)
+ POST /api/generate-itinerary 200 in 7.6s (compile: 46ms, render: 7.6s)
+prisma:query SELECT 1
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+ GET / 200 in 59ms (compile: 5ms, render: 54ms)
+Error generating itinerary: Error: Não foi possível processar a resposta da IA. Tente novamente.
+    at parseJSONRobust (src/app/api/generate-itinerary/route.ts:113:9)
+    at POST (src/app/api/generate-itinerary/route.ts:158:21)
+  111 |   } catch {}
+  112 |
+> 113 |   throw new Error("Não foi possível processar a resposta da IA. Tente novamente.");
+      |         ^
+  114 | }
+  115 |
+  116 | export async function POST(request: NextRequest) {
+ POST /api/generate-itinerary 500 in 16.4s (compile: 2ms, render: 16.4s)
+ GET / 200 in 41ms (compile: 3ms, render: 38ms)
+=== RAW AI RESPONSE START ===
+{"destino":"São Paulo","resumo":"Um dia explorando a rica cultura paulistana através de museus, gastronomia e pontos históricos, mantendo um ritmo relaxado.","dias":[{"dia":1,"titulo":"Cultura Paulistana","data":"20/04/2026","manha":[{"horario":"09:00","nome":"Museu de Arte de São Paulo (MASP)","descricao":"Visita à coleção de arte europeia e brasileira no icônico prédio","duracao":"2h30"}],"almoco":{"nome":"Gero","tipo":"Restaurante de Comida Japonesa","faixaPreco":"R$50-R$100","sugestao":"Temaki especial"},"tarde":[{"horario":"14:00","nome":"Pinacoteca do Estado de São Paulo","descricao":"Exploração da maior coleção de arte brasileira do país","duracao":"2h30"}],"jantar":{"nome":"Bar da Dona Onça","tipo":"Bar de Petiscos","faixaPreco":"R$40-R$80","sugestao":"Pastéis e drinks artesanais"},"noite":[{"horario":"20:30","nome":"Theatro Municipal de São Paulo","descricao":"Passeio pela arquitetura e possibilidade de assistir a um espetáculo cultural","duracao":"1h"}]}],"orcamentoDetalhado":{"hospedagem":"R$300","alimentacao":"R$200","transporte":"R$50","passeios":"R$100","total":"R$650"},"dicas":["Compre ingressos online para museus para evitar filas","Use o metrô para se locomover pela cidade de forma econômica","Visite os museus em horários menos movimentados para uma experiência mais tranquila","Experimente a variedade de bares culturais em Vila Madalena","Verifique se há exposições especiais durante a sua visita"]}
+=== RAW AI RESPONSE END ===
+=== RESPONSE LENGTH === 1438
+ POST /api/generate-itinerary 200 in 3.3s (compile: 43ms, render: 3.3s)
+prisma:query SELECT 1
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+=== RAW AI RESPONSE START ===
+{"destino":"Paris","resumo":"Roteiro intensivo de 4 dias pela capital francesa, explorando marcos culturais, gastronomia de alto nível e experiências únicas, mantendo o ritmo intenso típico da cidade.","dias":[{"dia":1,"titulo":"Descobrindo Paris Clássica","data":"01/05/2026","manha":[{"horario":"08:00","nome":"Tour Eiffel","descricao":"Visita ao icônico monumento com acesso ao segundo andar para fotos panorâmicas","duracao":"2h"}],"almoco":{"nome":"Le Jules Verne","tipo":"Frances","faixaPreco":"R$300-R$500","sugestao":"Menu degustação"},"tarde":[{"horario":"14:00","nome":"Museu do Louvre","descricao":"Exploração das obras-primas incluindo Mona Lisa e Vênus de Milo","duracao":"3h"}],"jantar":{"nome":"L'Ambroisie","tipo":"Frances","faixaPreco":"R$500-R$800","sugestao":"Menu degustação com vinhos de Borgonha"},"noite":[{"horario":"21:30","nome":"Cruise no Sena","descricao":"Passeio noturno pelo rio com vistas iluminadas dos monumentos","duracao":"1.5h"}]},{"dia":2,"titulo":"Arte e Gastronomia","data":"02/05/2026","manha":[{"horario":"09:00","nome":"Montmartre e Sacré-Cœur","descricao":"Passeio pelo bairro artístico com vista panorâmica da cidade","duracao":"2.5h"}],"almoco":{"nome":"La Maison Rose","tipo":"Bistrô","faixaPreco":"R$150-R$250","sugestao":"Cassoulet tradicional"},"tarde":[{"horario":"14:30","nome":"Museu d'Orsay","descricao":"Visita à coleção de arte impressionista e pós-impressionista","duracao":"2.5h"}],"jantar":{"nome":"Pierre Hermé","tipo":"Confeitaria","faixaPreco":"R$100-R$200","sugestao":"Degustação de macarons e sobremesas"},"noite":[{"horario":20:00,"nome":"Cabaret Moulin Rouge","descricao":"Espectáculo de cancan com jantar gourmet","duracao":"2.5h"}]},{"dia":3,"titulo":"Natureza e Aventura Urbana","data":"03/05/2026","manha":[{"horario":"08:30","nome":"Jardins de Versalhes","descricao":"Exploração dos jardins do palácio com almoço no local","duracao":"4h"}],"almoco":{"nome":"La Flottille","tipo":"Frances","faixaPreco":"R$200-R$350","sugestao":"Peixe do dia com vista para os jardins"},"tarde":[{"horario":14:00,"nome":"Palácio de Versalhes","descricao":"Visita ao palácio e apartamentos reais","duracao":"2h"}],"jantar":{"nome":"Le Comptoir du Relais","tipo":"Bistrô","faixaPreco":"R$150-R$300","sugestao":"Coq au vin"},"noite":[{"horario":21:00,"nome":"Tour Eiffel夜景","descricao":"Subida ao topo à noite para vistas espetaculares da cidade iluminada","duracao":"1h"}]},{"dia":4,"titulo":"Cultura e Despedida","data":"04/05/2026","manha":[{"horario":"09:00","nome":"Sainte-Chapelle","descricao":"Visita à capela com vitrais coloridos deslumbrantes","duracao":"1.5h"}],"almoco":{"nome":"Café de Flore","tipo":"Bistrô","faixaPreco":"R$100-R$200","sugestao":"Salão de chá com doces franceses"},"tarde":[{"horario":14:00,"nome":"Notre-Dame","descricao":"Visita à catedral (exterior e interior após restauração)","duracao":"2h"}],"jantar":{"nome":"Guy Savoy","tipo":"Frances","faixaPreco":"R$400-R$700","sugestao":"Menu degustação com ingredientes sazonais"},"noite":[{"horario":20:30,"nome":"Opéra Garnier","descricao":"Visita guiada à casa de ópera e seu espetáculo noturno","duracao":"1.5h"}]}],"orcamentoDetalhado":{"hospedagem":"R$4.000","alimentacao":"R$3.000","transporte":"R$1.500","passeios":"R$2.500","total":"R$11.000"},"dicas":["Reserve todos os restaurantes com semanas de antecedência","Compre o Paris Museum Pass para acesso rápido aos principais museus","Use o metrô para deslocamentos rápidos","Leve sapatos confortáveis para caminhadas longas","Verifique o horário de funcionamento dos monumentos antes de visitar"]}
+=== RAW AI RESPONSE END ===
+=== RESPONSE LENGTH === 3584
+Attempt 1 (direct) failed: Expected ',' or '}' after property value in JSON at position 1592 (line 1 column 1593)
+=== REPAIRED JSON ===
+{"destino":"Paris","resumo":"Roteiro intensivo de 4 dias pela capital francesa, explorando marcos culturais, gastronomia de alto nível e experiências únicas, mantendo o ritmo intenso típico da cidade.","dias":[{"dia":1,"titulo":"Descobrindo Paris Clássica","data":"01/05/2026","manha":[{"horario":"08:00","nome":"Tour Eiffel","descricao":"Visita ao icônico monumento com acesso ao segundo andar para fotos panorâmicas","duracao":"2h"}],"almoco":{"nome":"Le Jules Verne","tipo":"Frances","faixaPreco":"R$300-R$500","sugestao":"Menu degustação"},"tarde":[{"horario":"14:00","nome":"Museu do Louvre","descricao":"Exploração das obras-primas incluindo Mona Lisa e Vênus de Milo","duracao":"3h"}],"jantar":{"nome":"L'Ambroisie","tipo":"Frances","faixaPreco":"R$500-R$800","sugestao":"Menu degustação com vinhos de Borgonha"},"noite":[{"horario":"21:30","nome":"Cruise no Sena","descricao":"Passeio noturno pelo rio com vistas iluminadas dos monumentos","duracao":"1.5h"}]},{"dia":2,"titulo":"Arte e Gastronomia","data":"02/05/2026","manha":[{"horario":"09:00","nome":"Montmartre e Sacré-Cœur","descricao":"Passeio pelo bairro artístico com vista panorâmica da cidade","duracao":"2.5h"}],"almoco":{"nome":"La Maison Rose","tipo":"Bistrô","faixaPreco":"R$150-R$250","sugestao":"Cassoulet tradicional"},"tarde":[{"horario":"14:30","nome":"Museu d'Orsay","descricao":"Visita à coleção de arte impressionista e pós-impressionista","duracao":"2.5h"}],"jantar":{"nome":"Pierre Hermé","tipo":"Confeitaria","faixaPreco":"R$100-R$200","sugestao":"Degustação de macarons e sobremesas"},"noite":[{"horario":20:00,"nome":"Cabaret Moulin Rouge","descricao":"Espectáculo de cancan com jantar gourmet","duracao":"2.5h"}]},{"dia":3,"titulo":"Natureza e Aventura Urbana","data":"03/05/2026","manha":[{"horario":"08:30","nome":"Jardins de Versalhes","descricao":"Exploração dos jardins do palácio com almoço no local","duracao":"4h"}],"almoco":{"nome":"La Flottille","tipo":"Frances","faixaPreco":"R$200-R$350","sugestao":"Peixe do dia com vista para os jardins"},"tarde":[{"horario":14:00,"nome":"Palácio de Versalhes","descricao":"Visita ao palácio e apartamentos reais","duracao":"2h"}],"jantar":{"nome":"Le Comptoir du Relais","tipo":"Bistrô","faixaPreco":"R$150-R$300","sugestao":"Coq au vin"},"noite":[{"horario":21:00,"nome":"Tour Eiffel夜景","descricao":"Subida ao topo à noite para vistas espetaculares da cidade iluminada","duracao":"1h"}]},{"dia":4,"titulo":"Cultura e Despedida","data":"04/05/2026","manha":[{"horario":"09:00","nome":"Sainte-Chapelle","descricao":"Visita à capela com vitrais coloridos deslumbrantes","duracao":"1.5h"}],"almoco":{"nome":"Café de Flore","tipo":"Bistrô","faixaPreco":"R$100-R$200","sugestao":"Salão de chá com doces franceses"},"tarde":[{"horario":14:00,"nome":"Notre-Dame","descricao":"Visita à catedral (exterior e interior após restauração)","duracao":"2h"}],"jantar":{"nome":"Guy Savoy","tipo":"Frances","faixaPreco":"R$400-R$700","sugestao":"Menu degustação com ingredientes sazonais"},"noite":[{"horario":20:30,"nome":"Opéra Garnier","descricao":"Visita guiada à casa de ópera e seu espetáculo noturno","duracao":"1.5h"}]}],"orcamentoDetalhado":{"hospedagem":"R$4.000","alimentacao":"R$3.000","transporte":"R$1.500","passeios":"R$2.500","total":"R$11.000"},"dicas":["Reserve todos os restaurantes com semanas de antecedência","Compre o Paris Museum Pass para acesso rápido aos principais museus","Use o metrô para deslocamentos rápidos","Leve sapatos confortáveis para caminhadas longas","Verifique o horário de funcionamento dos monumentos antes de visitar"]}
+Attempt 2 (repair) failed: Expected ',' or '}' after property value in JSON at position 1592 (line 1 column 1593)
+Attempt 3 (extract) failed: Expected ',' or '}' after property value in JSON at position 1592 (line 1 column 1593)
+Attempt 4 (aggressive) failed: Expected ',' or '}' after property value in JSON at position 1592 (line 1 column 1593)
+Error generating itinerary: Error: Não foi possível processar a resposta da IA. Tente novamente.
+    at parseJSONRobust (src/app/api/generate-itinerary/route.ts:123:9)
+    at POST (src/app/api/generate-itinerary/route.ts:173:21)
+  121 |   }
+  122 |
+> 123 |   throw new Error("Não foi possível processar a resposta da IA. Tente novamente.");
+      |         ^
+  124 | }
+  125 |
+  126 | export async function POST(request: NextRequest) {
+ POST /api/generate-itinerary 500 in 14.5s (compile: 2ms, render: 14.5s)
+=== RAW AI RESPONSE START ===
+{"destino":"Paris","resumo":"Roteiro intenso de 4 dias pelos principais pontos turísticos de Paris, combinando cultura, gastronomia e aventura, com acomodação de luxo para 2 pessoas.","dias":[{"dia":1,"titulo":"Descobrindo Paris","data":"01/05/2026","manha":[{"horario":"08:00","nome":"Tour Eiffel","descricao":"Visita à icônica torre com vista panorâmica da cidade","duracao":"2h"}],"almoco":{"nome":"Le Jules Verne","tipo":"Frances","faixaPreco":"R$500-R$800","sugestao":"Menu degustação"},"tarde":[{"horario":"14:00","nome":"Museu do Louvre","descricao":"Exploração do maior museu de arte do mundo","duracao":"3h"}],"jantar":{"nome":"L'Ambroisie","tipo":"Frances","faixaPreco":"R$800-R$1200","sugestao":"Coq au vin"},"noite":[{"horario":"20:30","nome":"Cruise no Sena","descricao":"Passeio romântico pelo rio com jantar e show","duracao":"2h"}]},{"dia":2,"titulo":"Arte e Cultura","data":"02/05/2026","manha":[{"horario":"09:00","nome":"Notre-Dame","descricao":"Visita à catedral gótica (exterior e visita à cripta)","duracao":"2h"}],"almoco":{"nome":"Café de Flore","tipo":"Bistro","faixaPreco":"R$150-R$250","sugestao":"Croissant e café"},"tarde":[{"horario":"14:00","nome":"Montmartre e Sacré-Cœur","descricao":"Exploração do bairro artístico e visita à basílica","duracao":"3h"}],"jantar":{"nome":"Guy Savoy","tipo":"Frances","faixaPreco":"R$600-R$900","sugestao":"Menu degustação"},"noite":[{"horario":21:00,"nome":"Moulin Rouge","descricao":"Espectáculo de cabaré com jantar","duracao":"2h"}]},{"dia":3,"titulo":"Natureza e Aventura","data":"03/05/2026","manha":[{"horario":"08:00","nome":"Jardim de Tuileries","descricao":"Passeio matinal pelos jardins do Louvre","duracao":"1h30"}],"almoco":{"nome":"La Rotonde","tipo":"Bistro","faixaPreco":"R$120-R$200","sugestao":"Salão de chá"},"tarde":[{"horario":"10:30","nome":"Boat Tour no Sena","descricao":"Passeio de barco pelos canais de Saint-Martin","duracao":"3h"}],"jantar":{"nome":"Le Meurice","tipo":"Frances","faixaPreco":"R$700-R$1000","sugestao":"Trufa assada"},"noite":[{"horario":19:30,"nome":"Tour Eiffel iluminada","descricao":"Visita noturna com acesso VIP","duracao":"1h30"}]},{"dia":4,"titulo":"Despedida Parisiense","data":"04/05/2026","manha":[{"horario":"09:00","nome":"Champs-Élysées e Arco do Triunfo","descricao":"Passeio pela avenida mais famosa do mundo","duracao":"2h"}],"almoco":{"nome":"Pierre Hermé","tipo":"Confeitaria","faixaPreco":"R$100-R$200","sugestao":"Macaron"},"tarde":[{"horario":"14:00","nome":"Palácio de Versalhes","descricao":"Excursão ao palácio dos reis franceses","duracao":"4h"}],"jantar":{"nome":"Bistrot Paul Bert","tipo":"Frances","faixaPreco":"R$200-R$350","sugestao":"Canard à l'orange"},"noite":[{"horario":20:00,"nome":"Vista noturna do Sacré-Cœur","descricao":"Pôr do sol com vista panorâmica","duracao":"1h30"}]}],"orcamentoDetalhado":{"hospedagem":"R$4.000","alimentacao":"R$2.500","transporte":"R$800","passeios":"R$2.200","total":"R$9.500"},"dicas":["Reserve atrações com antecedência para evitar filas","Use metrô para se locomover entre pontos","Leve sapatos confortáveis para caminhadas","Aprenda algumas frases básicas em francês","Verifique os horários de funcionamento dos museus"]}
+=== RAW AI RESPONSE END ===
+=== RESPONSE LENGTH === 3202
+Attempt 1 (direct) failed: Expected ',' or '}' after property value in JSON at position 1412 (line 1 column 1413)
+=== REPAIRED JSON ===
+{"destino":"Paris","resumo":"Roteiro intenso de 4 dias pelos principais pontos turísticos de Paris, combinando cultura, gastronomia e aventura, com acomodação de luxo para 2 pessoas.","dias":[{"dia":1,"titulo":"Descobrindo Paris","data":"01/05/2026","manha":[{"horario":"08:00","nome":"Tour Eiffel","descricao":"Visita à icônica torre com vista panorâmica da cidade","duracao":"2h"}],"almoco":{"nome":"Le Jules Verne","tipo":"Frances","faixaPreco":"R$500-R$800","sugestao":"Menu degustação"},"tarde":[{"horario":"14:00","nome":"Museu do Louvre","descricao":"Exploração do maior museu de arte do mundo","duracao":"3h"}],"jantar":{"nome":"L'Ambroisie","tipo":"Frances","faixaPreco":"R$800-R$1200","sugestao":"Coq au vin"},"noite":[{"horario":"20:30","nome":"Cruise no Sena","descricao":"Passeio romântico pelo rio com jantar e show","duracao":"2h"}]},{"dia":2,"titulo":"Arte e Cultura","data":"02/05/2026","manha":[{"horario":"09:00","nome":"Notre-Dame","descricao":"Visita à catedral gótica (exterior e visita à cripta)","duracao":"2h"}],"almoco":{"nome":"Café de Flore","tipo":"Bistro","faixaPreco":"R$150-R$250","sugestao":"Croissant e café"},"tarde":[{"horario":"14:00","nome":"Montmartre e Sacré-Cœur","descricao":"Exploração do bairro artístico e visita à basílica","duracao":"3h"}],"jantar":{"nome":"Guy Savoy","tipo":"Frances","faixaPreco":"R$600-R$900","sugestao":"Menu degustação"},"noite":[{"horario":"21:00","nome":"Moulin Rouge","descricao":"Espectáculo de cabaré com jantar","duracao":"2h"}]},{"dia":3,"titulo":"Natureza e Aventura","data":"03/05/2026","manha":[{"horario":"08:00","nome":"Jardim de Tuileries","descricao":"Passeio matinal pelos jardins do Louvre","duracao":"1h30"}],"almoco":{"nome":"La Rotonde","tipo":"Bistro","faixaPreco":"R$120-R$200","sugestao":"Salão de chá"},"tarde":[{"horario":"10:30","nome":"Boat Tour no Sena","descricao":"Passeio de barco pelos canais de Saint-Martin","duracao":"3h"}],"jantar":{"nome":"Le Meurice","tipo":"Frances","faixaPreco":"R$700-R$1000","sugestao":"Trufa assada"},"noite":[{"horario":"19:30","nome":"Tour Eiffel iluminada","descricao":"Visita noturna com acesso VIP","duracao":"1h30"}]},{"dia":4,"titulo":"Despedida Parisiense","data":"04/05/2026","manha":[{"horario":"09:00","nome":"Champs-Élysées e Arco do Triunfo","descricao":"Passeio pela avenida mais famosa do mundo","duracao":"2h"}],"almoco":{"nome":"Pierre Hermé","tipo":"Confeitaria","faixaPreco":"R$100-R$200","sugestao":"Macaron"},"tarde":[{"horario":"14:00","nome":"Palácio de Versalhes","descricao":"Excursão ao palácio dos reis franceses","duracao":"4h"}],"jantar":{"nome":"Bistrot Paul Bert","tipo":"Frances","faixaPreco":"R$200-R$350","sugestao":"Canard à l'orange"},"noite":[{"horario":"20:00","nome":"Vista noturna do Sacré-Cœur","descricao":"Pôr do sol com vista panorâmica","duracao":"1h30"}]}],"orcamentoDetalhado":{"hospedagem":"R$4.000","alimentacao":"R$2.500","transporte":"R$800","passeios":"R$2.200","total":"R$9.500"},"dicas":["Reserve atrações com antecedência para evitar filas","Use metrô para se locomover entre pontos","Leve sapatos confortáveis para caminhadas","Aprenda algumas frases básicas em francês","Verifique os horários de funcionamento dos museus"]}
+ POST /api/generate-itinerary 200 in 8.5s (compile: 48ms, render: 8.5s)
+prisma:query SELECT 1
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+=== RAW AI RESPONSE START ===
+{"destino":"Tóquio","resumo":"Roteiro intenso de 6 dias explorando a cultura vibrante, gastronomia diversificada, aventuras urbanas e locais fotogênicos de Tóquio, perfeito para 3 viajantes com orçamento confortável.","dias":[{"dia":1,"titulo":"Arrival and Traditional Tokyo","data":"10/06/2026","manha":[{"horario":"08:00","nome":"Aeroporto Haneda","descricao":"Chegada e transferência para o hotel","duracao":"1h"}],"almoco":{"nome":"Sukiyabashi Jiro","tipo":"Sushi Bar","faixaPreco":"R$300-R$500","sugestao":"Omakase experience"},"tarde":[{"horario":"14:00","nome":"Senso-ji Temple","descricao":"Visita ao templo mais antigo de Tóquio","duracao":"2h"},{"horario":"16:30","nome":"Asakusa District","descricao":"Exploração do tradicional distrito de Asakusa","duracao":"2h"}],"jantar":{"nome":"Asakusa Imahan","tipo":"Shabu-Shabu","faixaPreco":"R$150-R$250","sugestao":"Carne premium com molho especial"},"noite":[{"horario":"20:00","nome":"Skytree Tower","descricao":"Vista noturna da cidade do observatório","duracao":"1h"}]},{"dia":2,"titulo":"Modern Tokyo and Pop Culture","data":"11/06/2026","manha":[{"horario":"08:00","nome":"Shibuya Crossing","descricao":"Experiência na famosa passarela de pedestres","duracao":"1h"},{"horario":"09:30","nome":"Shibuya Sky","descricao":"Vista panorâmica do bairro","duracao":"1h"}],"almoco":{"nome":"Ichiran Ramen","tipo":"Ramen","faixaPreco":"R$80-R$120","sugestao":"Ramen tonkotsu personalizado"},"tarde":[{"horario":"13:00","nome":"Harajuku Takeshita Street","descricao":"Exploração da cultura jovem e moda de rua","duracao":"2h"},{"horario":"15:30","nome":"Meiji Shrine","descricao":"Paz e serenidade no coração da metrópole","duracao":"1h"}],"jantar":{"nome":"Robot Restaurant","tipo":"Entretenimento","faixaPreco":"R$200-R$300","sugestao":"Show com robôs e luzes coloridas"},"noite":[{"horario":21:00,"nome":"Shinjuku Golden Gai","descricao":"Exploração dos bares temáticos","duracao":"2h"}]},{"dia":3,"titulo":"Tech and Nature Day","data":"12/06/2026","manha":[{"horario":"08:00","nome":"Akihabara Electric Town","descricao":"Centro eletrônico e anime","duracao":"2h"}],"almoco":{"nome":"Ganso Ramen Yokocho","tipo":"Ramen","faixaPreco":"R$100-R$150","sugestao":"Variedade de ramens tradicionais"},"tarde":[{"horario":"13:30","nome":"Odaiba","descricao":"Ilha artificial com atrações futuristas","duracao":"3h"},{"horario":17:00,"nome":"Rainbow Bridge","descricao":"Passeio de navio pela baía","duracao":"1h"}],"jantar":{"nome":"Jojoen","tipo":"Yakitori","faixaPreco":"R$150-R$250","sugestao":"Espetinhos de frango e vegetais"},"noite":[{"horario":20:00,"nome":"TeamLab Borderless","descricao":"Experiência de arte digital imersiva","duracao":"2h"}]},{"dia":4,"titulo":"Traditional Arts and Crafts","data":"13/06/2026","manha":[{"horario":"08:00","nome":"Tsukiji Outer Market","descricao":"Mercado de peixes e artesanato","duracao":"2h"}],"almoco":{"nome":"Sushi Dai","tipo":"Sushi","faixaPreco":"R$200-R$300","sugestao":"Sushi fresco do mercado"},"tarde":[{"horario":13:00,"nome":"Imperial Palace Gardens","descricao":"Passeio pelos jardins imperiais","duracao":"2h"},{"horario":15:30,"nome":"Ginza District","descricao":"Compras e arquitetura moderna","duracao":"2h"}],"jantar":{"nome":"Narisawa","tipo":"Fine Dining","faixaPreco":"R$500-R$800","sugestao":"Degustação molecular japonesa"},"noite":[{"horario":20:00,"nome":"Kabuki-za Theater","descricao":"Espectáculo tradicional de kabuki","duracao":"2h"}]},{"dia":5,"titulo":"Mount Fuji Day Trip","data":"14/06/2026","manha":[{"horario":"07:00","nome":"Bus para Fuji Five Lakes","descricao":"Viagem panorâmica para o Fuji","duracao":"2h"}],"almoco":{"nome":"Fuji View Restaurant","tipo":"Comida japonesa","faixaPreco":"R$150-R$250","sugestao":"Pratos com vista para o monte Fuji"},"tarde":[{"horario":13:00,"nome":"Lake Kawaguchiko","descricao":"Atividades ao redor do lago","duracao":"3h"},{"horario":16:30,"nome":"Arakurayama Sengen Park","descricao":"Vista clássica do Fuji com pagode","duracao":"1h"}],"jantar":{"nome":"Kichijoji","tipo":"Izakaya","faixaPreco":"R$120-R$200","sugestao":"Pratos compartilhados com saquê"},"noite":[{"horario":20:00,"nome":"Return to Tokyo","descricao":"Retorno para Tóquio","duracao":"1h"}]},{"dia":6,"titulo":"Last Explorations and Departure","data":"15/06/2026","manha":[{"horario":"08:00","nome":"Yanaka District","descricao":"Bairro tradicional de Tóquio","duracao":"2h"}],"almoco":{"nome":"Tofu Kagaya","tipo":"Tofu","faixaPreco":"R$100-R$150","sugestao":"Pratos de tofu gourmet"},"tarde":[{"horario":13:00,"nome":"Ueno Park","descricao":"Museus e templos no parque","duracao":"2h"},{"horario":15:30,"nome":"Ameya Yokocho Market","descricao":"Compras de última hora","duracao":"1h"}],"jantar":{"nome":"Katsukura","tipo":"Tonkatsu","faixaPreco":"R$120-R$200","sugestao":"Filé de porco empanado"},"noite":[{"horario":18:00,"nome":"Transfer to airport","descricao":"Despedida de Tóquio","duracao":"1h"}]}],"orcamentoDetalhado":{"hospedagem":"R$4500","alimentacao":"R$3500","transporte":"R$2000","passeios":"R$3000","total":"R$13000"},"dicas":["Compre o Japan Rail Pass antecipadamente para economizar em transporte","Reserve restaurantes populares com semanas de antecedência","Use o aplicativo Hyperdia para planejar viagens de trem","Carregue seus dispositivos em cafés com tomadas gratuitas","Leve moedas para templos e santuários para oferendas"]}
+=== RAW AI RESPONSE END ===
+=== RESPONSE LENGTH === 5392
+Attempt 1 (direct) failed: Expected ',' or '}' after property value in JSON at position 1846 (line 1 column 1847)
+=== REPAIRED JSON ===
+{"destino":"Tóquio","resumo":"Roteiro intenso de 6 dias explorando a cultura vibrante, gastronomia diversificada, aventuras urbanas e locais fotogênicos de Tóquio, perfeito para 3 viajantes com orçamento confortável.","dias":[{"dia":1,"titulo":"Arrival and Traditional Tokyo","data":"10/06/2026","manha":[{"horario":"08:00","nome":"Aeroporto Haneda","descricao":"Chegada e transferência para o hotel","duracao":"1h"}],"almoco":{"nome":"Sukiyabashi Jiro","tipo":"Sushi Bar","faixaPreco":"R$300-R$500","sugestao":"Omakase experience"},"tarde":[{"horario":"14:00","nome":"Senso-ji Temple","descricao":"Visita ao templo mais antigo de Tóquio","duracao":"2h"},{"horario":"16:30","nome":"Asakusa District","descricao":"Exploração do tradicional distrito de Asakusa","duracao":"2h"}],"jantar":{"nome":"Asakusa Imahan","tipo":"Shabu-Shabu","faixaPreco":"R$150-R$250","sugestao":"Carne premium com molho especial"},"noite":[{"horario":"20:00","nome":"Skytree Tower","descricao":"Vista noturna da cidade do observatório","duracao":"1h"}]},{"dia":2,"titulo":"Modern Tokyo and Pop Culture","data":"11/06/2026","manha":[{"horario":"08:00","nome":"Shibuya Crossing","descricao":"Experiência na famosa passarela de pedestres","duracao":"1h"},{"horario":"09:30","nome":"Shibuya Sky","descricao":"Vista panorâmica do bairro","duracao":"1h"}],"almoco":{"nome":"Ichiran Ramen","tipo":"Ramen","faixaPreco":"R$80-R$120","sugestao":"Ramen tonkotsu personalizado"},"tarde":[{"horario":"13:00","nome":"Harajuku Takeshita Street","descricao":"Exploração da cultura jovem e moda de rua","duracao":"2h"},{"horario":"15:30","nome":"Meiji Shrine","descricao":"Paz e serenidade no coração da metrópole","duracao":"1h"}],"jantar":{"nome":"Robot Restaurant","tipo":"Entretenimento","faixaPreco":"R$200-R$300","sugestao":"Show com robôs e luzes coloridas"},"noite":[{"horario":"21:00","nome":"Shinjuku Golden Gai","descricao":"Exploração dos bares temáticos","duracao":"2h"}]},{"dia":3,"titulo":"Tech and Nature Day","data":"12/06/2026","manha":[{"horario":"08:00","nome":"Akihabara Electric Town","descricao":"Centro eletrônico e anime","duracao":"2h"}],"almoco":{"nome":"Ganso Ramen Yokocho","tipo":"Ramen","faixaPreco":"R$100-R$150","sugestao":"Variedade de ramens tradicionais"},"tarde":[{"horario":"13:30","nome":"Odaiba","descricao":"Ilha artificial com atrações futuristas","duracao":"3h"},{"horario":"17:00","nome":"Rainbow Bridge","descricao":"Passeio de navio pela baía","duracao":"1h"}],"jantar":{"nome":"Jojoen","tipo":"Yakitori","faixaPreco":"R$150-R$250","sugestao":"Espetinhos de frango e vegetais"},"noite":[{"horario":"20:00","nome":"TeamLab Borderless","descricao":"Experiência de arte digital imersiva","duracao":"2h"}]},{"dia":4,"titulo":"Traditional Arts and Crafts","data":"13/06/2026","manha":[{"horario":"08:00","nome":"Tsukiji Outer Market","descricao":"Mercado de peixes e artesanato","duracao":"2h"}],"almoco":{"nome":"Sushi Dai","tipo":"Sushi","faixaPreco":"R$200-R$300","sugestao":"Sushi fresco do mercado"},"tarde":[{"horario":"13:00","nome":"Imperial Palace Gardens","descricao":"Passeio pelos jardins imperiais","duracao":"2h"},{"horario":"15:30","nome":"Ginza District","descricao":"Compras e arquitetura moderna","duracao":"2h"}],"jantar":{"nome":"Narisawa","tipo":"Fine Dining","faixaPreco":"R$500-R$800","sugestao":"Degustação molecular japonesa"},"noite":[{"horario":"20:00","nome":"Kabuki-za Theater","descricao":"Espectáculo tradicional de kabuki","duracao":"2h"}]},{"dia":5,"titulo":"Mount Fuji Day Trip","data":"14/06/2026","manha":[{"horario":"07:00","nome":"Bus para Fuji Five Lakes","descricao":"Viagem panorâmica para o Fuji","duracao":"2h"}],"almoco":{"nome":"Fuji View Restaurant","tipo":"Comida japonesa","faixaPreco":"R$150-R$250","sugestao":"Pratos com vista para o monte Fuji"},"tarde":[{"horario":"13:00","nome":"Lake Kawaguchiko","descricao":"Atividades ao redor do lago","duracao":"3h"},{"horario":"16:30","nome":"Arakurayama Sengen Park","descricao":"Vista clássica do Fuji com pagode","duracao":"1h"}],"jantar":{"nome":"Kichijoji","tipo":"Izakaya","faixaPreco":"R$120-R$200","sugestao":"Pratos compartilhados com saquê"},"noite":[{"horario":"20:00","nome":"Return to Tokyo","descricao":"Retorno para Tóquio","duracao":"1h"}]},{"dia":6,"titulo":"Last Explorations and Departure","data":"15/06/2026","manha":[{"horario":"08:00","nome":"Yanaka District","descricao":"Bairro tradicional de Tóquio","duracao":"2h"}],"almoco":{"nome":"Tofu Kagaya","tipo":"Tofu","faixaPreco":"R$100-R$150","sugestao":"Pratos de tofu gourmet"},"tarde":[{"horario":"13:00","nome":"Ueno Park","descricao":"Museus e templos no parque","duracao":"2h"},{"horario":"15:30","nome":"Ameya Yokocho Market","descricao":"Compras de última hora","duracao":"1h"}],"jantar":{"nome":"Katsukura","tipo":"Tonkatsu","faixaPreco":"R$120-R$200","sugestao":"Filé de porco empanado"},"noite":[{"horario":"18:00","nome":"Transfer to airport","descricao":"Despedida de Tóquio","duracao":"1h"}]}],"orcamentoDetalhado":{"hospedagem":"R$4500","alimentacao":"R$3500","transporte":"R$2000","passeios":"R$3000","total":"R$13000"},"dicas":["Compre o Japan Rail Pass antecipadamente para economizar em transporte","Reserve restaurantes populares com semanas de antecedência","Use o aplicativo Hyperdia para planejar viagens de trem","Carregue seus dispositivos em cafés com tomadas gratuitas","Leve moedas para templos e santuários para oferendas"]}
+ POST /api/generate-itinerary 200 in 13.7s (compile: 2ms, render: 13.7s)
+prisma:query SELECT 1
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+ GET / 200 in 51ms (compile: 3ms, render: 48ms)
+=== RAW AI RESPONSE LENGTH === 6226
+Error generating itinerary: Error: Não foi possível processar a resposta da IA. Tente novamente.
+    at parseJSONRobust (src/app/api/generate-itinerary/route.ts:116:9)
+    at POST (src/app/api/generate-itinerary/route.ts:163:21)
+  114 |   } catch {}
+  115 |
+> 116 |   throw new Error("Não foi possível processar a resposta da IA. Tente novamente.");
+      |         ^
+  117 | }
+  118 |
+  119 | export async function POST(request: NextRequest) {
+ POST /api/generate-itinerary 500 in 21.4s (compile: 41ms, render: 21.4s)
+ POST /api/generate-itinerary 200 in 14.5s (compile: 51ms, render: 14.4s)
+prisma:query SELECT 1
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+ POST /api/generate-itinerary 200 in 5.5s (compile: 2ms, render: 5.5s)
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+ POST /api/generate-itinerary 200 in 4.5s (compile: 1994µs, render: 4.5s)
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+ POST /api/generate-itinerary 200 in 6.8s (compile: 1904µs, render: 6.8s)
+prisma:query SELECT 1
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
+ GET / 200 in 46ms (compile: 4ms, render: 41ms)
+ POST /api/generate-itinerary 200 in 19.8s (compile: 1909µs, render: 19.8s)
+prisma:query SELECT 1
+prisma:query INSERT INTO `main`.`Itinerario` (`id`, `destino`, `dataInicio`, `dataFim`, `orcamento`, `viajantes`, `interesses`, `estiloViagem`, `roteiro`, `createdAt`) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING `id` AS `id`, `destino` AS `destino`, `dataInicio` AS `dataInicio`, `dataFim` AS `dataFim`, `orcamento` AS `orcamento`, `viajantes` AS `viajantes`, `interesses` AS `interesses`, `estiloViagem` AS `estiloViagem`, `roteiro` AS `roteiro`, `createdAt` AS `createdAt`
