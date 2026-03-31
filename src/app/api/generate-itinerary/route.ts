@@ -4,204 +4,127 @@ import { db } from "@/lib/db";
 
 export const maxDuration = 120;
 
+function extractJSON(raw: string): string {
+  const m = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (m) return m[1].trim();
+  let s = raw.trim();
+  if (s.startsWith("```json")) s = s.slice(7);
+  else if (s.startsWith("```")) s = s.slice(3);
+  if (s.endsWith("```")) s = s.slice(0, -3);
+  return s.trim();
+}
+
 function repairJSON(raw: string): string {
   let s = raw;
-
-  // Remove markdown code blocks
-  const codeBlockMatch = s.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if (codeBlockMatch) {
-    s = codeBlockMatch[1];
-  } else {
-    if (s.startsWith("```json")) s = s.slice(7);
-    else if (s.startsWith("```")) s = s.slice(3);
-    if (s.endsWith("```")) s = s.slice(0, -3);
-  }
-  s = s.trim();
-
-  // Fix unquoted time values: ":20:00" or ": 20:00" -> ":"20:00""
-  s = s.replace(/:\s*(\d{1,2}:\d{2})([\s,}\]])/g, ':"$1"$2');
-  // Fix unquoted duration values: ":2h" or ":1.5h" -> ":"2h""
-  s = s.replace(/:\s*(\d+(?:\.\d+)?h)([\s,}\]])/g, ':"$1"$2');
-
-  // Remove single-line comments
   s = s.replace(/\/\/.*$/gm, "");
-  // Remove multi-line comments
   s = s.replace(/\/\*[\s\S]*?\*\//g, "");
-
-  // Replace single quotes with double quotes
+  s = s.replace(/:\s*(?<!")(\d{1,2}:\d{2})(?!"\s*[,}\]\s])([\s,}\]])/g, ':"$1"$2');
+  s = s.replace(/:\s*(?<!")(\d+(?:\.\d+)?(?:h|min)\b)(?!"\s*[,\]}])([\s,}\]])/gi, ':"$1"$2');
   s = s.replace(/(?<=[\[\{,:\s])'|'(?=[\]\},:\s])/g, '"');
-
-  // Fix trailing commas before } or ]
   s = s.replace(/,\s*([}\]])/g, "$1");
-  // Fix missing commas between elements
   s = s.replace(/\}\s*\{/g, "},{");
   s = s.replace(/\]\s*\{/g, "],{");
   s = s.replace(/\}\s*\[/g, "},[");
-
-  // Fix unescaped newlines inside strings
-  let result = "";
-  let inString = false;
-  let escape = false;
+  let result = "", inStr = false, esc = false;
   for (let i = 0; i < s.length; i++) {
     const ch = s[i];
-    if (escape) { result += ch; escape = false; continue; }
-    if (ch === "\\") { result += ch; escape = true; continue; }
-    if (ch === '"') { inString = !inString; result += ch; continue; }
-    if (inString && (ch === "\n" || ch === "\r")) { result += "\\n"; continue; }
+    if (esc) { result += ch; esc = false; continue; }
+    if (ch === "\\") { result += ch; esc = true; continue; }
+    if (ch === '"') { inStr = !inStr; result += ch; continue; }
+    if (inStr && (ch === "\n" || ch === "\r")) { result += "\\n"; continue; }
     result += ch;
   }
-
   return result;
 }
 
 function tryParse(raw: string): unknown {
-  // Attempt 1: Direct parse
-  try { return JSON.parse(raw); } catch {}
-
-  // Attempt 2: Repair + parse
+  for (const a of [raw, extractJSON(raw), repairJSON(raw), repairJSON(extractJSON(raw))]) {
+    try { const p = JSON.parse(a); if (p && typeof p === "object") return p; } catch {}
+  }
+  const i = raw.indexOf("{"), j = raw.lastIndexOf("}");
+  if (i !== -1 && j > i) {
+    const e = raw.substring(i, j + 1);
+    for (const r of [e, repairJSON(e)]) { try { const p = JSON.parse(r); if (p && typeof p === "object") return p; } catch {} }
+  }
   try {
-    return JSON.parse(repairJSON(raw));
+    let f = raw.replace(/:(\s*)(?!")([A-Za-zÀ-ÿ][^",}\]\n\r]{0,80}?)(\s*[,}\]])/g, (_, w, v, e) => /^-?\d+(\.\d+)?$/.test(v.trim()) ? _ : `${w}"${v.trim()}"${e}`);
+    const p = JSON.parse(repairJSON(f)); if (p && typeof p === "object") return p;
   } catch {}
-
-  // Attempt 3: Extract outermost JSON object with depth tracking, then repair
-  try {
-    let depth = 0;
-    let start = -1;
-    for (let i = 0; i < raw.length; i++) {
-      if (raw[i] === "{") {
-        if (depth === 0) start = i;
-        depth++;
-      } else if (raw[i] === "}") {
-        depth--;
-        if (depth === 0 && start !== -1) {
-          return JSON.parse(repairJSON(raw.substring(start, i + 1)));
-        }
-      }
-    }
-  } catch {}
-
-  // Attempt 4: Aggressive cleanup
-  try {
-    let cleaned = raw.replace(/[\x00-\x1F\x7F]/g, (m) =>
-      (m === "\n" || m === "\r" || m === "\t") ? " " : ""
-    );
-    return JSON.parse(repairJSON(cleaned));
-  } catch {}
-
   return null;
 }
 
+const SYS = `Você é um planejador de viagens. Gere APENAS JSON válido puro, sem markdown.
+Regras: use aspas duplas, horários como "08:00", durações como "2h", sem vírgulas extras.
+Formato: {"destino":"...","resumo":"...","dias":[{"dia":1,"titulo":"...","data":"DD/MM/YYYY","manha":[{"horario":"08:00","nome":"...","descricao":"...","duracao":"2h"}],"almoco":{"nome":"...","tipo":"...","faixaPreco":"...","sugestao":"..."},"tarde":[{"horario":"14:00","nome":"...","descricao":"...","duracao":"2h"}],"jantar":{"nome":"...","tipo":"...","faixaPreco":"...","sugestao":"..."},"noite":[{"horario":"20:00","nome":"...","descricao":"...","duracao":"2h"}]}],"orcamentoDetalhado":{"hospedagem":"...","alimentacao":"...","transporte":"...","passeios":"...","total":"..."},"dicas":["...","...","...","...","..."]}`;
+
+// POST: Create job and start background generation (returns instantly)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { destino, dataInicio, dataFim, orcamento, viajantes, interesses, estiloViagem } = body;
-
     if (!destino || !dataInicio || !dataFim || !orcamento || !viajantes || !interesses || !estiloViagem) {
-      return NextResponse.json({ error: "Todos os campos são obrigatórios." }, { status: 400 });
+      return NextResponse.json({ error: "Preencha todos os campos." }, { status: 400 });
     }
 
-    const zai = await ZAI.create();
-
-    const systemPrompt = `Você é um planejador de viagens. Responda APENAS com JSON válido puro, sem markdown, sem texto extra.
-FORMATO (siga EXATAMENTE, sem adicionar campos extras, use aspas em TODOS os valores de texto):
-{"destino":"nome","resumo":"parágrafo curto","dias":[{"dia":1,"titulo":"Título","data":"DD/MM/YYYY","manha":[{"horario":"08:00","nome":"Nome","descricao":"Texto curto","duracao":"2h"}],"almoco":{"nome":"Restaurante","tipo":"Tipo","faixaPreco":"R$X","sugestao":"Prato"},"tarde":[{"horario":"14:00","nome":"Nome","descricao":"Texto curto","duracao":"2h"}],"jantar":{"nome":"Restaurante","tipo":"Tipo","faixaPreco":"R$X","sugestao":"Prato"},"noite":[{"horario":"20:00","nome":"Nome","descricao":"Texto curto","duracao":"2h"}]}],"orcamentoDetalhado":{"hospedagem":"valor","alimentacao":"valor","transporte":"valor","passeios":"valor","total":"valor"},"dicas":["dica1","dica2","dica3","dica4","dica5"]}`;
-
-    const start = new Date(dataInicio);
-    const end = new Date(dataFim);
-    const numDays = Math.ceil(Math.abs(end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-
-    const userPrompt = `Roteiro para ${destino}, ${dataInicio} a ${dataFim} (${numDays} dias). Orçamento: ${orcamento} para ${viajantes} viajante(s). Interesses: ${interesses}. Estilo: ${estiloViagem}. IMPORTANTE: Use aspas duplas em TODOS os valores de string, inclusive horarios como "20:00" e durações como "2h". Apenas JSON puro.`;
-
-    const completion = await zai.chat.completions.create({
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
-      ],
-      temperature: 0.3,
-      max_tokens: 4096,
+    const record = await db.itinerario.create({
+      data: { destino, dataInicio, dataFim, orcamento, viajantes: parseInt(viajantes), interesses, estiloViagem, roteiro: "", status: "processing" },
     });
 
-    const messageContent = completion.choices[0]?.message?.content;
-    if (!messageContent) {
-      return NextResponse.json({ error: "Não foi possível gerar o roteiro. Tente novamente." }, { status: 500 });
-    }
+    // Fire and forget — generation runs in background
+    generate(record.id, { destino, dataInicio, dataFim, orcamento, viajantes: parseInt(viajantes), interesses, estiloViagem });
 
-    // Try to parse with local repair
-    let itinerary = tryParse(messageContent) as Record<string, unknown> | null;
-
-    // FALLBACK: If local repair fails, ask the AI to fix its own JSON
-    if (!itinerary) {
-      console.error("Local JSON repair failed, asking AI to fix...");
-      try {
-        const fixCompletion = await zai.chat.completions.create({
-          messages: [
-            {
-              role: "system",
-              content: "Você é um reparador de JSON. O JSON abaixo está com erros de formatação. Corrija TODOS os erros e retorne APENAS o JSON válido, sem markdown, sem explicação, sem texto adicional. IMPORTANTE: Todos os valores de texto devem estar entre aspas duplas. Valores como horarios (ex: \"20:00\") e durações (ex: \"2h\") devem estar entre aspas."
-            },
-            {
-              role: "user",
-              content: `Corrija este JSON e retorne APENAS o JSON corrigido:\n\n${messageContent}`
-            },
-          ],
-          temperature: 0,
-          max_tokens: 4096,
-        });
-
-        const fixedContent = fixCompletion.choices[0]?.message?.content;
-        if (fixedContent) {
-          itinerary = tryParse(fixedContent) as Record<string, unknown> | null;
-          if (itinerary) {
-            console.log("AI fix succeeded!");
-          }
-        }
-      } catch (fixError) {
-        console.error("AI fix also failed:", fixError);
-      }
-    }
-
-    if (!itinerary) {
-      return NextResponse.json(
-        { error: "Não foi possível processar a resposta da IA. Tente novamente." },
-        { status: 500 }
-      );
-    }
-
-    if (!itinerary.dias || !Array.isArray(itinerary.dias) || itinerary.dias.length === 0) {
-      return NextResponse.json(
-        { error: "O roteiro gerado está incompleto. Tente novamente." },
-        { status: 500 }
-      );
-    }
-
-    // Save to database (non-blocking)
-    db.itinerario.create({
-      data: {
-        destino,
-        dataInicio,
-        dataFim,
-        orcamento,
-        viajantes: parseInt(viajantes),
-        interesses,
-        estiloViagem,
-        roteiro: JSON.stringify(itinerary),
-      },
-    }).catch((err: unknown) => console.error("DB save error:", err));
-
-    return NextResponse.json(itinerary);
+    return NextResponse.json({ jobId: record.id, status: "processing" });
   } catch (error: unknown) {
-    console.error("Error generating itinerary:", error);
-    const message = error instanceof Error ? error.message : "Erro interno do servidor";
-    return NextResponse.json({ error: `Erro ao gerar roteiro: ${message}` }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Erro" }, { status: 500 });
   }
 }
 
-export async function GET() {
+// GET: Poll status by jobId
+export async function GET(request: NextRequest) {
+  const jobId = new URL(request.url).searchParams.get("id");
+  if (!jobId) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+
+  const record = await db.itinerario.findUnique({ where: { id: jobId } });
+  if (!record) return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
+
+  if (record.status === "completed") {
+    return NextResponse.json({ jobId: record.id, status: "completed", itinerary: JSON.parse(record.roteiro) });
+  }
+  if (record.status === "failed") {
+    return NextResponse.json({ jobId: record.id, status: "failed", error: record.erro || "Erro ao gerar." });
+  }
+  return NextResponse.json({ jobId: record.id, status: "processing" });
+}
+
+async function generate(jobId: string, params: { destino: string; dataInicio: string; dataFim: string; orcamento: string; viajantes: number; interesses: string; estiloViagem: string }) {
   try {
-    const itinerarios = await db.itinerario.findMany({ orderBy: { createdAt: "desc" }, take: 10 });
-    return NextResponse.json(itinerarios);
-  } catch (error) {
-    console.error("Error fetching itineraries:", error);
-    return NextResponse.json({ error: "Erro ao buscar roteiros" }, { status: 500 });
+    const { destino, dataInicio, dataFim, orcamento, viajantes, interesses, estiloViagem } = params;
+    const zai = await ZAI.create();
+    const numDays = Math.ceil(Math.abs(new Date(dataFim).getTime() - new Date(dataInicio).getTime()) / 86400000) + 1;
+    const prompt = `Roteiro para ${destino}, ${dataInicio} a ${dataFim} (${numDays} dias). Orçamento: ${orcamento}. Viajantes: ${viajantes}. Interesses: ${interesses}. Estilo: ${estiloViagem}.`;
+
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const retry = attempt === 2 ? `IMPORTANTE: JSON puro, sem markdown. Aspas duplas. Horários: "08:00". Durações: "2h".\n\n${prompt}` : prompt;
+        const timeout = new Promise<never>((_, reject) => setTimeout(() => reject(new Error("timeout")), 55000));
+        const completion = await Promise.race([
+          zai.chat.completions.create({ messages: [{ role: "system", content: SYS }, { role: "user", content: retry }], temperature: attempt === 2 ? 0.1 : 0.3, max_tokens: 4096 }),
+          timeout,
+        ]);
+        const content = completion.choices[0]?.message?.content;
+        if (!content) continue;
+
+        const itinerary = tryParse(content);
+        if (!itinerary || typeof itinerary !== "object") continue;
+        const data = itinerary as Record<string, unknown>;
+        if (!data.dias || !Array.isArray(data.dias) || data.dias.length === 0) continue;
+
+        await db.itinerario.update({ where: { id: jobId }, data: { status: "completed", roteiro: JSON.stringify(data) } });
+        return;
+      } catch {}
+    }
+    await db.itinerario.update({ where: { id: jobId }, data: { status: "failed", erro: "IA não conseguiu gerar um roteiro válido." } });
+  } catch {
+    await db.itinerario.update({ where: { id: jobId }, data: { status: "failed", erro: "Erro interno do servidor." } }).catch(() => {});
   }
 }

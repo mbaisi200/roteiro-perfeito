@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import jsPDF from 'jspdf';
 import {
   MapPin,
   Calendar,
@@ -33,6 +34,7 @@ import {
   Sunset,
   Heart,
   Info,
+  Download,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -400,22 +402,11 @@ export default function Home() {
     e.preventDefault();
 
     if (!destino || !dataInicio || !dataFim || !orcamento || !viajantes || interesses.length === 0 || !estiloViagem) {
-      toast({
-        title: 'Campos obrigatórios',
-        description: 'Por favor, preencha todos os campos e selecione pelo menos um interesse.',
-        variant: 'destructive',
-      });
+      toast({ title: 'Campos obrigatórios', description: 'Preencha todos os campos.', variant: 'destructive' });
       return;
     }
-
-    const start = new Date(dataInicio);
-    const end = new Date(dataFim);
-    if (end < start) {
-      toast({
-        title: 'Datas inválidas',
-        description: 'A data de fim deve ser posterior à data de início.',
-        variant: 'destructive',
-      });
+    if (new Date(dataFim) < new Date(dataInicio)) {
+      toast({ title: 'Datas inválidas', description: 'Data de fim deve ser posterior ao início.', variant: 'destructive' });
       return;
     }
 
@@ -423,84 +414,103 @@ export default function Home() {
     setRoteiro(null);
     setError(null);
 
-    // Rotate loading messages
-    const messages = [
+    const msgs = [
       'Pesquisando destinos incríveis...',
       'Encontrando os melhores passeios...',
       'Selecionando restaurantes imperdíveis...',
       'Calculando rotas e transporte...',
       'Preparando dicas exclusivas...',
-      'Finalizando seu roteiro perfeito...',
+      'A IA está criando seu roteiro...',
     ];
-    let msgIndex = 0;
-    setLoadingMessage(messages[0]);
-    const msgInterval = setInterval(() => {
-      msgIndex = (msgIndex + 1) % messages.length;
-      setLoadingMessage(messages[msgIndex]);
-    }, 5000);
+    let mi = 0;
+    setLoadingMessage(msgs[0]);
+    const msgTimer = setInterval(() => { mi = (mi + 1) % msgs.length; setLoadingMessage(msgs[mi]); }, 3500);
 
     try {
-      const interessesLabels = interesses
-        .map((id) => INTERESSES_OPTIONS.find((opt) => opt.id === id)?.label)
-        .filter(Boolean)
-        .join(', ');
+      const interessesLabels = interesses.map((id) => INTERESSES_OPTIONS.find((o) => o.id === id)?.label).filter(Boolean).join(', ');
 
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 180000); // 3 minutes timeout
-
-      const response = await fetch('/api/generate-itinerary', {
+      // Step 1: POST — returns instantly with jobId
+      const postRes = await fetch('/api/generate-itinerary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          destino,
-          dataInicio,
-          dataFim,
-          orcamento,
-          viajantes,
-          interesses: interessesLabels,
-          estiloViagem,
-        }),
-        signal: controller.signal,
+        body: JSON.stringify({ destino, dataInicio, dataFim, orcamento, viajantes, interesses: interessesLabels, estiloViagem }),
       });
 
-      clearTimeout(timeoutId);
-      clearInterval(msgInterval);
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao gerar roteiro');
+      if (!postRes.ok) {
+        const err = await postRes.json().catch(() => ({ error: 'Erro de conexão.' }));
+        throw new Error(err.error || 'Erro ao iniciar.');
       }
 
-      // Validate the response has required data
-      if (!data.dias || !Array.isArray(data.dias) || data.dias.length === 0) {
-        throw new Error('O roteiro gerado está incompleto. Tente novamente.');
-      }
+      const { jobId } = await postRes.json();
+      if (!jobId) throw new Error('Erro ao iniciar geração.');
 
-      setRoteiro(data);
-      toast({
-        title: 'Roteiro criado com sucesso! ✈️',
-        description: `Seu roteiro para ${destino} está pronto!`,
-      });
-    } catch (error: unknown) {
-      clearInterval(msgInterval);
-      let message = 'Erro desconhecido';
-      if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          message = 'A requisição demorou muito. Tente novamente (o servidor pode estar sob carga).';
-        } else {
-          message = error.message;
+      // Step 2: Poll using setTimeout chain (no setInterval = no loop risk)
+      let consecutiveErrors = 0;
+      const MAX_POLL = 40; // 40 * 3s = 2 min
+
+      const poll = async (attempt: number): Promise<void> => {
+        if (attempt > MAX_POLL) {
+          clearInterval(msgTimer);
+          setIsLoading(false);
+          setError('A geração demorou muito. Tente novamente.');
+          toast({ title: 'Tempo esgotado', description: 'Tente novamente.', variant: 'destructive' });
+          return;
         }
-      }
-      console.error('Itinerary generation error:', error);
-      setError(message);
-      toast({
-        title: 'Erro ao gerar roteiro',
-        description: message,
-        variant: 'destructive',
-      });
-    } finally {
+
+        try {
+          const res = await fetch(`/api/generate-itinerary?id=${jobId}`);
+          if (!res.ok) {
+            consecutiveErrors++;
+            if (consecutiveErrors >= 3) {
+              clearInterval(msgTimer);
+              setIsLoading(false);
+              setError('Servidor indisponível. Recarregue a página.');
+              toast({ title: 'Sem conexão', description: 'Recarregue a página.', variant: 'destructive' });
+              return;
+            }
+            setTimeout(() => poll(attempt + 1), 3000);
+            return;
+          }
+
+          const data = await res.json();
+          consecutiveErrors = 0;
+
+          if (data.status === 'completed' && data.itinerary) {
+            clearInterval(msgTimer);
+            setIsLoading(false);
+            setRoteiro(data.itinerary as RoteiroCompleto);
+            toast({ title: 'Roteiro criado! ✈️', description: `Roteiro para ${destino} pronto!` });
+          } else if (data.status === 'failed') {
+            clearInterval(msgTimer);
+            setIsLoading(false);
+            setError(data.error || 'Erro ao gerar roteiro.');
+            toast({ title: 'Erro', description: data.error || 'Tente novamente.', variant: 'destructive' });
+          } else {
+            // still processing
+            setTimeout(() => poll(attempt + 1), 3000);
+          }
+        } catch {
+          consecutiveErrors++;
+          if (consecutiveErrors >= 3) {
+            clearInterval(msgTimer);
+            setIsLoading(false);
+            setError('Erro de conexão. Recarregue a página.');
+            toast({ title: 'Sem conexão', description: 'Recarregue a página.', variant: 'destructive' });
+            return;
+          }
+          setTimeout(() => poll(attempt + 1), 3000);
+        }
+      };
+
+      // Start polling chain
+      poll(1);
+
+    } catch (error: unknown) {
+      clearInterval(msgTimer);
       setIsLoading(false);
+      const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+      setError(msg);
+      toast({ title: 'Erro', description: msg, variant: 'destructive' });
     }
   };
 
@@ -515,6 +525,236 @@ export default function Home() {
     setRoteiro(null);
     setError(null);
   };
+
+  const handleExportPDF = useCallback(() => {
+    if (!roteiro) return;
+    toast({ title: 'Gerando PDF...', description: 'Seu roteiro está sendo exportado.' });
+
+    const doc = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const contentWidth = pageWidth - margin * 2;
+    let y = 20;
+
+    const checkPage = (needed: number) => {
+      if (y + needed > doc.internal.pageSize.getHeight() - 20) {
+        doc.addPage();
+        y = 20;
+      }
+    };
+
+    // Title
+    doc.setFillColor(217, 119, 6);
+    doc.rect(0, 0, pageWidth, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.text('RoteiroPerfeito', margin, 18);
+    doc.setFontSize(12);
+    doc.text(`Roteiro de Viagem - ${roteiro.destino}`, margin, 28);
+    doc.setFontSize(9);
+    doc.text(`Gerado em ${new Date().toLocaleDateString('pt-BR')}`, margin, 35);
+    y = 50;
+
+    // Summary
+    doc.setTextColor(55, 65, 81);
+    doc.setFontSize(10);
+    const summaryLines = doc.splitTextToSize(roteiro.resumo || '', contentWidth);
+    doc.text(summaryLines, margin, y);
+    y += summaryLines.length * 5 + 8;
+
+    // Badges info
+    doc.setFontSize(9);
+    doc.setTextColor(120, 53, 15);
+    doc.text(`${roteiro.dias?.length ?? 0} dias  |  ${viajantes} viajante(s)  |  ${orcamento}`, margin, y);
+    y += 10;
+
+    // Separator
+    doc.setDrawColor(217, 119, 6);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 10;
+
+    // Days
+    roteiro.dias?.forEach((dia) => {
+      checkPage(40);
+      // Day header
+      doc.setFillColor(245, 158, 11);
+      doc.roundedRect(margin, y, contentWidth, 10, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Dia ${dia.dia}: ${dia.titulo}${dia.data ? ` - ${dia.data}` : ''}`, margin + 4, y + 7);
+      doc.setFont('helvetica', 'normal');
+      y += 14;
+
+      // Helper to render activities
+      const renderActivities = (label: string, atividades: typeof dia.manha) => {
+        if (!atividades || atividades.length === 0) return;
+        checkPage(20);
+        doc.setFillColor(254, 243, 199);
+        doc.roundedRect(margin, y, contentWidth, 6, 1, 1, 'F');
+        doc.setTextColor(146, 64, 14);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.text(label, margin + 3, y + 4.5);
+        doc.setFont('helvetica', 'normal');
+        y += 8;
+
+        atividades.forEach((atv) => {
+          checkPage(16);
+          doc.setTextColor(55, 65, 81);
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'bold');
+          doc.text(`${atv.horario} - ${atv.nome}`, margin + 4, y + 4);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8);
+          doc.setTextColor(107, 114, 128);
+          const descLines = doc.splitTextToSize(atv.descricao || '', contentWidth - 12);
+          doc.text(descLines, margin + 4, y + 8);
+          y += descLines.length * 3.5 + 3;
+          if (atv.dica) {
+            checkPage(10);
+            doc.setTextColor(5, 150, 105);
+            doc.setFontSize(8);
+            const dicaLines = doc.splitTextToSize(`Dica: ${atv.dica}`, contentWidth - 12);
+            doc.text(dicaLines, margin + 6, y + 3);
+            y += dicaLines.length * 3.5 + 2;
+          }
+          y += 1;
+        });
+        y += 3;
+      };
+
+      renderActivities('Manhã', dia.manha);
+
+      // Lunch
+      if (dia.almoco) {
+        checkPage(16);
+        doc.setFillColor(255, 237, 213);
+        doc.roundedRect(margin, y, contentWidth, 6, 1, 1, 'F');
+        doc.setTextColor(154, 52, 18);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Almoço - ${dia.almoco.nome}`, margin + 3, y + 4.5);
+        doc.setFont('helvetica', 'normal');
+        y += 8;
+        doc.setFontSize(8);
+        doc.setTextColor(107, 114, 128);
+        doc.text(`${dia.almoco.tipo} | ${dia.almoco.faixaPreco}`, margin + 4, y + 3);
+        y += 4;
+        const almSug = doc.splitTextToSize(`Sugestão: ${dia.almoco.sugestao}`, contentWidth - 12);
+        doc.text(almSug, margin + 4, y + 3);
+        y += almSug.length * 3.5 + 4;
+      }
+
+      renderActivities('Tarde', dia.tarde);
+
+      // Dinner
+      if (dia.jantar) {
+        checkPage(16);
+        doc.setFillColor(241, 245, 249);
+        doc.roundedRect(margin, y, contentWidth, 6, 1, 1, 'F');
+        doc.setTextColor(30, 58, 138);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Jantar - ${dia.jantar.nome}`, margin + 3, y + 4.5);
+        doc.setFont('helvetica', 'normal');
+        y += 8;
+        doc.setFontSize(8);
+        doc.setTextColor(107, 114, 128);
+        doc.text(`${dia.jantar.tipo} | ${dia.jantar.faixaPreco}`, margin + 4, y + 3);
+        y += 4;
+        const jantSug = doc.splitTextToSize(`Sugestão: ${dia.jantar.sugestao}`, contentWidth - 12);
+        doc.text(jantSug, margin + 4, y + 3);
+        y += jantSug.length * 3.5 + 4;
+      }
+
+      renderActivities('Noite', dia.noite);
+      y += 5;
+    });
+
+    // Budget
+    checkPage(50);
+    doc.setFillColor(217, 119, 6);
+    doc.roundedRect(margin, y, contentWidth, 8, 2, 2, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Orçamento Detalhado', margin + 4, y + 5.5);
+    doc.setFont('helvetica', 'normal');
+    y += 12;
+
+    const orc = roteiro.orcamentoDetalhado;
+    if (orc) {
+      const budgetItems = [
+        { label: 'Hospedagem', value: orc.hospedagem },
+        { label: 'Alimentação', value: orc.alimentacao },
+        { label: 'Transporte', value: orc.transporte },
+        { label: 'Passeios', value: orc.passeios },
+      ];
+      doc.setFontSize(9);
+      budgetItems.forEach((item) => {
+        doc.setTextColor(107, 114, 128);
+        doc.text(item.label, margin + 4, y + 3);
+        doc.setTextColor(55, 65, 81);
+        doc.text(item.value || '', pageWidth - margin - 4, y + 3, { align: 'right' });
+        y += 6;
+      });
+      // Total
+      doc.setDrawColor(217, 119, 6);
+      doc.setLineWidth(0.3);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 4;
+      doc.setFillColor(245, 158, 11);
+      doc.roundedRect(margin, y, contentWidth, 8, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Total Estimado', margin + 4, y + 5.5);
+      doc.text(orc.total || '', pageWidth - margin - 4, y + 5.5, { align: 'right' });
+      doc.setFont('helvetica', 'normal');
+      y += 14;
+    }
+
+    // Tips
+    checkPage(40);
+    doc.setFillColor(217, 119, 6);
+    doc.roundedRect(margin, y, contentWidth, 8, 2, 2, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Dicas Importantes', margin + 4, y + 5.5);
+    doc.setFont('helvetica', 'normal');
+    y += 12;
+
+    doc.setFontSize(9);
+    roteiro.dicas?.forEach((dica, i) => {
+      checkPage(10);
+      doc.setFillColor(254, 243, 199);
+      doc.circle(margin + 4, y + 2, 2, 'F');
+      doc.setTextColor(55, 65, 81);
+      const dicaLines = doc.splitTextToSize(`${dica}`, contentWidth - 14);
+      doc.text(dicaLines, margin + 10, y + 4);
+      y += dicaLines.length * 3.5 + 4;
+    });
+
+    // Footer on each page
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      doc.setFontSize(7);
+      doc.setTextColor(156, 163, 175);
+      doc.text(
+        `RoteiroPerfeito - Gerado por Inteligência Artificial | Página ${i} de ${totalPages}`,
+        pageWidth / 2,
+        doc.internal.pageSize.getHeight() - 8,
+        { align: 'center' }
+      );
+    }
+
+    doc.save(`roteiro-${roteiro.destino.toLowerCase().replace(/\s+/g, '-')}.pdf`);
+    toast({ title: 'PDF exportado!', description: `Roteiro de ${roteiro.destino} salvo com sucesso.` });
+  }, [roteiro, viajantes, orcamento, toast]);
 
   // Form State
   const showForm = !roteiro && !isLoading && !error;
@@ -1206,13 +1446,21 @@ export default function Home() {
                 </TabsContent>
               </Tabs>
 
-              {/* Reset Button */}
+              {/* Action Buttons */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="text-center pt-4 pb-8"
+                className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 pb-8"
               >
+                <Button
+                  onClick={handleExportPDF}
+                  size="lg"
+                  className="h-14 text-base bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white shadow-lg shadow-teal-500/25 hover:shadow-xl hover:shadow-teal-500/30 hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Exportar PDF
+                </Button>
                 <Button
                   onClick={handleReset}
                   size="lg"

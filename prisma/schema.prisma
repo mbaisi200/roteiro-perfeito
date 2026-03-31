@@ -38,5 +38,7 @@ model Itinerario {
   interesses    String
   estiloViagem  String
   roteiro       String
+  status        String   @default("pending") // pending, processing, completed, failed
+  erro          String?
   createdAt     DateTime @default(now())
 }
